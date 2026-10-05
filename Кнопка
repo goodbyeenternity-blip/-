@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Кнопка Отсимпампусить</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #ffe6f2;
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .simpa-button {
+            padding: 20px 40px;
+            font-size: 24px;
+            font-weight: bold;
+            color: white;
+            background: linear-gradient(45deg, #ff66b2, #ff3399);
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 6px 15px rgba(255, 51, 153, 0.4);
+            transition: transform 0.1s ease, box-shadow 0.2s ease;
+            outline: none;
+        }
+
+        /* Эффект при наведении */
+        .simpa-button:hover {
+            box-shadow: 0 8px 20px rgba(255, 51, 153, 0.6);
+            transform: translateY(-2px);
+        }
+
+        /* Эффект при нажатии */
+        .simpa-button:active {
+            transform: scale(0.95);
+            box-shadow: 0 3px 10px rgba(255, 51, 153, 0.4);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Кнопка -->
+    <button class="simpa-button" onclick="playOi()">Отсимпампусить ✨</button>
+
+    <!-- Звуковой элемент (синтезированный звук "Ой" через Web Audio API, чтобы не зависеть от внешних файлов) -->
+    <script>
+        function playOi() {
+            // Используем Web Audio API для создания мультяшного звука "Ой!"
+            const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            
+            // Основной тон
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            
+            osc.type = 'triangle'; // Мягкий мультяшный звук
+            
+            // Резкий взлет частоты вверх и спад (имитация интонации "Ой!")
+            osc.frequency.setValueAtTime(150, audioCtx.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(600, audioCtx.currentTime + 0.08);
+            osc.frequency.exponentialRampToValueAtTime(300, audioCtx.currentTime + 0.25);
+            
+            // Быстрое затухание громкости
+            gain.gain.setValueAtTime(0.5, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.25);
+            
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            
+            osc.start();
+            osc.stop(audioCtx.currentTime + 0.25);
+        }
+    </script>
+
+</body>
+</html>
